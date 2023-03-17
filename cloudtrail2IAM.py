@@ -76,7 +76,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Analyze CloudTrail logs for specific actions')
     parser.add_argument('--prefix', required=True, help='The S3 prefix for CloudTrail logs')
-    parser.add_argument('--bucket_name', required=True, help='The S3 bucket name containing CloudTrail logs')
+    parser.add_argument('--bucket_name', required=True, help='The S3 bucket name containing CloudTrail logs. e.q.: "AWSLogs/<acc-id>/CloudTrail/"')
     parser.add_argument('--profile', required=True, help='The AWS profile to use for accessing the S3 bucket')
     parser.add_argument('--threads', type=int, default=10, help='The number of threads to use for processing log files')
     parser.add_argument('--filter-name', required=False, help='Only get actions performed by this name')
