@@ -1,10 +1,10 @@
 # Cloudtrail2IAM
 
-CloudTrail2IAM is a Python tool that analyzes **AWS CloudTrail logs to extract and summarize actions** done by everyone or just an specific user or role. The tool will **parse every cloudtrail log from the indicated bucket**.
+**CloudTrail2IAM** is a Python tool that analyzes **AWS CloudTrail logs to extract and summarize actions** done by everyone or just an specific user or role. The tool will **parse every cloudtrail log from the indicated bucket**.
 
 This is useful for red teamers that have **read access over Cloudtrail logs and wants to have more info about the permissions** of the roles and users but **doesn't have read access over IAM**.
 
-*Note that a Cloudtrail bucket might contain hundreds of thousands of log files. So this could take several minutes.*
+*Note that a Cloudtrail bucket might contain hundreds of thousands of log files. So this could take several minutes/hours.*
 
 ## Installation
 
