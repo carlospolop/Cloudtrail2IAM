@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Semaphore
 
-ALL_ACTIONS: Dict[str, List[str]] = {}
+ALL_ACTIONS: Dict[str, Dict] = {}
 semaphore = Semaphore()
 
 def get_s3_client(profile: str):
@@ -40,12 +40,19 @@ def extract_actions_from_log_file(file_path: str):
         for record in data.get('Records', []):
             if 'userIdentity' in record and 'arn' in record['userIdentity']:
                 arn = fix_arn(record['userIdentity']['arn'])
-                action = record['eventSource'].split(".")[0] + " - " + record['eventName']
+                action = record['eventSource'].split(".")[0] + ":" + record['eventName']
+                timestamp = record['eventTime']
+
                 with semaphore:
                     if not ALL_ACTIONS.get(arn):
-                        ALL_ACTIONS[arn] = set([action])
+                        ALL_ACTIONS[arn] = {action: timestamp}
                     else:
-                        ALL_ACTIONS[arn].add(action)
+                        if action in ALL_ACTIONS[arn]:
+                            stored_timestamp = ALL_ACTIONS[arn][action]
+                            if timestamp > stored_timestamp:
+                                ALL_ACTIONS[arn][action] = timestamp
+                        else:
+                            ALL_ACTIONS[arn][action] = timestamp
 
 def get_all_keys(s3_client, bucket_name: str, prefix: str) -> List[Dict[str, Any]]:
     """List all objects with the specified prefix in the S3 bucket."""
@@ -104,9 +111,9 @@ def main():
 
     for arn, actions in ALL_ACTIONS.items():
         print(f'Actions performed by {arn}')
-        actions = sorted(actions)
-        for action in actions:
-            print(f"- {action}")
+        sorted_actions = {key: actions[key] for key in sorted(actions)}
+        for action,time in sorted_actions.items():
+            print(f"- {action} ({time})")
 
 if __name__ == '__main__':
     main()
