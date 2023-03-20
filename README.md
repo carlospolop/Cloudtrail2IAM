@@ -12,5 +12,5 @@ This is useful for red teamers that have **read access over Cloudtrail logs and 
 git clone https://github.com/carlospolop/Cloudtrail2IAM
 cd Cloudtrail2IAM
 pip install -r requirements.txt
-python3 cloudtrail2IAM.py --prefix PREFIX --bucket_name BUCKET_NAME --profile PROFILE [--filter-name FILTER_NAME] [--threads THREADS]
+python3 cloudtrail2IAM.py --prefix PREFIX --bucket-name BUCKET_NAME --profile PROFILE [--filter-name FILTER_NAME] [--threads THREADS]
 ```
